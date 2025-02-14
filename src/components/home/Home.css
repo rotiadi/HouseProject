@@ -23,3 +23,13 @@
     justify-content: space-between;
     align-items: center;
 }
+
+
+.section-home-title{
+    text-decoration: none;
+    
+}
+
+.section-home-title:hover {
+    color: #f50057;
+}   

@@ -9,7 +9,13 @@ import { useTranslation } from "react-i18next";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "../styles/main.css";
-import { createTheme, CssBaseline, ThemeProvider, Drawer } from "@mui/material";
+import {
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  Drawer,
+  Box,
+} from "@mui/material";
 import RegisterPage from "./RegisterPage";
 
 const MainPage = () => {
@@ -87,62 +93,63 @@ const MainPage = () => {
   const { t } = useTranslation();
 
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-
-        <Header
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
-          setDrawerOpen={setDrawerOpen}
-          currentMenu={currentMenu}
-          useTranslation={t}
-          setcurrentMenu={setcurrentMenu}
-        />
-
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Content
-                selectedMenuItem={currentMenu?.component}
-                menuItems={menuItems.filter((item) => item.onMain)}
-                useTranslation={t}
-              />
-            }
+    <Box component="main" className="main">
+      <Router>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Header
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+            setDrawerOpen={setDrawerOpen}
+            currentMenu={currentMenu}
+            useTranslation={t}
+            setcurrentMenu={setcurrentMenu}
           />
-          <Route path="/login" element={<LoginPage useTranslation={t} />} />
-
-          {menuItems.map((item) => (
+          <Routes>
             <Route
-              path={item.component}
+              path="/"
               element={
                 <Content
-                  selectedMenuItem={item.component}
+                  selectedMenuItem={currentMenu?.component}
                   menuItems={menuItems.filter((item) => item.onMain)}
                   useTranslation={t}
                 />
               }
             />
-          ))}
+            <Route path="/login" element={<LoginPage useTranslation={t} />} />
 
-          <Route
-            path="/register"
-            element={<RegisterPage useTranslation={t} />}
-          />
-        </Routes>
+            {menuItems.map((item) => (
+              <Route
+                key={item.id}
+                path={item.component}
+                element={
+                  <Content
+                    className="content"
+                    selectedMenuItem={item.component}
+                    menuItems={menuItems.filter((item) => item.onMain)}
+                    useTranslation={t}
+                  />
+                }
+              />
+            ))}
 
-        <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-          <SideMenu
-            menuItems={menuItems}
-            onMenuItemClick={(menuItem) => handlleMenuItemClick(menuItem)}
-            useTranslation={t}
-          />
-        </Drawer>
+            <Route
+              path="/register"
+              element={<RegisterPage useTranslation={t} />}
+            />
+          </Routes>
+          <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+            <SideMenu
+              menuItems={menuItems}
+              onMenuItemClick={(menuItem) => handlleMenuItemClick(menuItem)}
+              useTranslation={t}
+            />
+          </Drawer>
 
-        <Footer />
-      </ThemeProvider>
-    </Router>
+          <Footer className="footer" />
+        </ThemeProvider>
+      </Router>
+    </Box>
   );
 };
 export default MainPage;

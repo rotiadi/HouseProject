@@ -4,6 +4,24 @@
     box-sizing: border-box;     
 }
 
+
+
+.main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;    
+}
+
+.footer {
+  
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    
+}
+
+
 .content {
-    min-height: 100vh;
+    flex-grow: 1;
+    padding: 2 0;
 }

@@ -38,6 +38,7 @@ i18n.use(initReactI18next).init({
         "Email Address": "Email Address",
         "Full Name": "Full Name",
         Register: "Register",
+        "Registration form": "Registration form",
       },
     },
     fr: {
@@ -75,6 +76,7 @@ i18n.use(initReactI18next).init({
         "Email Address": "Adresse e-mail",
         "Full Name": "Nom complet",
         Register: "S'inscrire",
+        "Registration form": "Formulaire d'inscription",
       },
     },
     ro: {
@@ -112,6 +114,7 @@ i18n.use(initReactI18next).init({
         "Email Address": "Adresa de e-mail",
         "Full Name": "Nume complet",
         Register: "Inregistrare",
+        "Registration form": "Formular de inregistrare",
       },
     },
   },

@@ -1,6 +1,7 @@
 import React from "react";
 import i18n from "../i18n";
 import LanguageIcon from "@mui/icons-material/Language";
+import { Box, Container } from "@mui/material";
 
 const LanguageSelector = () => {
   return (
@@ -17,13 +18,22 @@ const LanguageSelector = () => {
 
 const Footer = () => {
   return (
-    <footer>
-      <LanguageIcon />
-      <LanguageSelector />
-      <p>Contact us: info@example.com</p>
-      <p>Phone: (123) 456-7890</p>
-      <p>Address: 123 Main St, Anytown, USA</p>
-    </footer>
+    <Box
+      component={"footer"}
+      position={"fixed"}
+      bottom={0}
+      left={0}
+      width="100%"
+      display={"flex"}
+      height="3rem"
+      alignItems="center"
+      bgcolor={"primary.main"}
+    >
+      <Container>
+        <LanguageIcon />
+        <LanguageSelector />
+      </Container>
+    </Box>
   );
 };
 

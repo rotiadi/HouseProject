@@ -13,8 +13,11 @@ const SectionHome = ({
 }) => {
   return (
     <div className="section-home">
-      <h1>{useTranslation(name)}</h1>
-
+      <h1>
+        <Link to={`/${component}`} className="section-home-title">
+          {useTranslation(name)}
+        </Link>
+      </h1>
       <div className="section-home-content">
         {counter === true ? (
           <IndexSection useTranslation={useTranslation} />
