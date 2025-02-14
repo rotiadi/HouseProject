@@ -112,16 +112,20 @@ const MainPage = () => {
             }
           />
           <Route path="/login" element={<LoginPage useTranslation={t} />} />
-          <Route
-            path={currentMenu?.component}
-            element={
-              <Content
-                selectedMenuItem={currentMenu?.component}
-                menuItems={menuItems.filter((item) => item.onMain)}
-                useTranslation={t}
-              />
-            }
-          />
+
+          {menuItems.map((item) => (
+            <Route
+              path={item.component}
+              element={
+                <Content
+                  selectedMenuItem={item.component}
+                  menuItems={menuItems.filter((item) => item.onMain)}
+                  useTranslation={t}
+                />
+              }
+            />
+          ))}
+
           <Route
             path="/register"
             element={<RegisterPage useTranslation={t} />}
