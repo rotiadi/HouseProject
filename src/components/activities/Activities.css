@@ -22,14 +22,13 @@
     color: #007bff;
 }
 
-.modal-viewActivity {
-    position: absolute;    
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50%;    
-    border: px solid #7691a5;
-    box-shadow: 24;
+.task-dialog {
     
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: normal;
+    gap: 2rem;
+    padding: 2rem;
+
 }

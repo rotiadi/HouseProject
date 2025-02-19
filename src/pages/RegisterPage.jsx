@@ -43,11 +43,6 @@ const RegisterPage = ({ useTranslation }) => {
 
   const handleRePasswordChange = (password) => {
     setUser({ ...user, rePassword: password });
-    console.log(
-      password !== user.password && user.password !== "" && password !== ""
-    );
-    console.log("password", password);
-    console.log("user.Password", user.password);
 
     if (password !== user.password && user.password !== "" && password !== "") {
       setMessage("Password and re-password are not the same");
