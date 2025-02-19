@@ -17,8 +17,6 @@ const RegisterPage = ({ useTranslation }) => {
   const [showRePassword, setShowRePassword] = useState(false);
 
   const handleClickRegister = () => {
-    // TODO: implement check input values
-
     axios
       .post("http://localhost:5000/users/register", user)
       .then((res) => {
