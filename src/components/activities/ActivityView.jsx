@@ -27,6 +27,7 @@ const ActivityView = ({
   mode,
   task,
   setTask,
+  setIsChanged,
 }) => {
   const handleTypeChenge = (event) => {
     setTask({ ...task, type: event.target.value });
@@ -46,12 +47,19 @@ const ActivityView = ({
 
   const handleSave = () => {
     if (mode === "add") {
+      setTask({
+        ...task,
+        status: "New",
+        startDate: dayjs().format("DD-MM-YYYY"),
+      });
+
       axios
         .post("http://localhost:5000/tasks/add", task, {
           withCredentials: true,
         })
         .then((res) => {
           console.log("The task was saved successfully");
+          setIsChanged(true);
           handleClose();
         })
         .catch((err) => {
@@ -111,36 +119,40 @@ const ActivityView = ({
             onChange={(e) => setTask({ ...task, client: e.target.value })}
           ></TextField>
         </FormControl>
-        <FormControl>
-          <InputLabel id="label-Status">Status</InputLabel>
-          <Select
-            required
-            labelId="label-Status"
-            id="status"
-            name="status"
-            label="Status"
-            value={task.status}
-            onChange={handleStatusChange}
-          >
-            <MenuItem value="New">New</MenuItem>
-            <MenuItem value="Pending">Pending</MenuItem>
-            <MenuItem value="In Progress">In Progress</MenuItem>
-            <MenuItem value="Completed">Completed</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateField
-              label="Enter a start date"
-              name="startDate"
-              id="startDate"
-              value={dayjs(task.startDate)}
-              onChange={handleDateChange}
-              format="DD-MM-YYYY"
+        {mode !== "add" && (
+          <FormControl>
+            <InputLabel id="label-Status">Status</InputLabel>
+            <Select
               required
-            />
-          </LocalizationProvider>
-        </FormControl>
+              labelId="label-Status"
+              id="status"
+              name="status"
+              label="Status"
+              value={task.status}
+              onChange={handleStatusChange}
+            >
+              <MenuItem value="New">New</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="In Progress">In Progress</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+        {mode !== "add" && (
+          <FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                label="Enter a start date"
+                name="startDate"
+                id="startDate"
+                value={dayjs(task.startDate)}
+                onChange={handleDateChange}
+                format="DD-MM-YYYY"
+                required
+              />
+            </LocalizationProvider>
+          </FormControl>
+        )}
         <FormControl>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateField

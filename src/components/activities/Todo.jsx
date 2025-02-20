@@ -8,50 +8,31 @@ import {
   TableCell,
   TableBody,
   Button,
+  TableSortLabel,
 } from "@mui/material";
 import ActivityView from "./ActivityView";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const Todo = ({ useTranslation }) => {
   const [dataTodoList, setDataTodoList] = useState([]);
+  const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
-    console.log("Fetching data");
-
     const fetchData = async () => {
       try {
         const result = await axios.get("http://localhost:5000/tasks/get", {
           withCredentials: true,
         });
         setDataTodoList(result.data);
+        setRows(result.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
-
-  /*  const [dataTodoList, setDataTodoList] = useState([
-    {
-      id: 1,
-      name: "Task 1",
-      type: "Work",
-      client: "Client 1",
-      description: "Description 1",
-      status: "Pending",
-      startDate: "01/30/2025",
-      dueDate: "01/30/2025",
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      type: "Personal",
-      client: "Client 2",
-      description: "Description 2",
-      status: "In Progress",
-    },
-  ]); */
+  }, [isChanged]);
 
   const [task, setTask] = useState({
     id: 0,
@@ -93,6 +74,25 @@ const Todo = ({ useTranslation }) => {
 
   const [mode, setMode] = useState("add");
 
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("name");
+
+  const [rows, setRows] = useState(dataTodoList);
+
+  const handleSort = (column) => {
+    const isAsc = orderBy === column && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(column);
+
+    const sortedRows = [...rows].sort((a, b) => {
+      if (a[column] < b[column]) return isAsc ? -1 : 1;
+      if (a[column] > b[column]) return isAsc ? 1 : -1;
+      return 0;
+    });
+
+    setRows(sortedRows);
+  };
+
   return (
     <div className="activities-container-table">
       <h1 className="activities-table-title">
@@ -111,17 +111,81 @@ const Todo = ({ useTranslation }) => {
         <TableContainer component={Paper} className="activities-table">
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>{useTranslation("Type")}</TableCell>
-                <TableCell>{useTranslation("Client")}</TableCell>
-                <TableCell>{useTranslation("Description")}</TableCell>
+              <TableRow sx={{ backgroundColor: "#9EC7EF" }}>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "type"}
+                    direction={order}
+                    onClick={() => handleSort("type")}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {useTranslation("Type")}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "name"}
+                    direction={order}
+                    onClick={() => handleSort("name")}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {useTranslation("Title")}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "client"}
+                    direction={order}
+                    onClick={() => handleSort("client")}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {useTranslation("Client")}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "description"}
+                    direction={order}
+                    onClick={() => handleSort("description")}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {useTranslation("Description")}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "start_date"}
+                    direction={order}
+                    onClick={() => handleSort("start_date")}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {useTranslation("Date")}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "due_date"}
+                    direction={order}
+                    onClick={() => handleSort("due_date")}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {useTranslation("Due Date")}
+                  </TableSortLabel>
+                </TableCell>
+
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataTodoList.map((activity, index) => (
-                <TableRow key={index}>
+              {rows.map((activity, index) => (
+                <TableRow
+                  key={index}
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#f5f5f5" : "white",
+                  }}
+                >
                   <TableCell>{activity.type}</TableCell>
+                  <TableCell>{activity.name}</TableCell>
                   <TableCell>{activity.client}</TableCell>
                   <TableCell
                     className="activities-table-description"
@@ -130,6 +194,13 @@ const Todo = ({ useTranslation }) => {
                     }}
                   >
                     {activity.description}
+                  </TableCell>
+                  <TableCell>
+                    {dayjs(activity.start_date).format("DD/MM/YYYY")}
+                  </TableCell>
+                  <TableCell>
+                    {" "}
+                    {dayjs(activity.due_date).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell>
                     <Button
@@ -154,6 +225,7 @@ const Todo = ({ useTranslation }) => {
         mode={mode}
         task={task}
         setTask={setTask}
+        setIsChanged={setIsChanged}
       />
     </div>
   );
