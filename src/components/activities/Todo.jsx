@@ -9,6 +9,7 @@ import {
   TableBody,
   Button,
   TableSortLabel,
+  TextField,
 } from "@mui/material";
 import ActivityView from "./ActivityView";
 import axios from "axios";
@@ -93,6 +94,24 @@ const Todo = ({ useTranslation }) => {
     setRows(sortedRows);
   };
 
+  const [filterText, setFilterText] = useState("");
+
+  const handleFilterChange = (text) => {
+    setFilterText(text);
+  };
+
+  const filteredRows = rows.filter((row) => {
+    if (!filterText.trim()) return true;
+
+    return Object.keys(row).some((key) => {
+      const cellValue = row[key] ?? "";
+      return cellValue
+        .toString()
+        .toLowerCase()
+        .includes(filterText.toLowerCase());
+    });
+  });
+
   return (
     <div className="activities-container-table">
       <h1 className="activities-table-title">
@@ -175,9 +194,20 @@ const Todo = ({ useTranslation }) => {
 
                 <TableCell></TableCell>
               </TableRow>
+              <TableRow>
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    placeholder="Filter Words"
+                    value={filterText}
+                    onChange={(e) => handleFilterChange(e.target.value)}
+                  />
+                </TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((activity, index) => (
+              {filteredRows.map((activity, index) => (
                 <TableRow
                   key={index}
                   sx={{
