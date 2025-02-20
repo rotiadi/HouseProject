@@ -3,6 +3,8 @@ import "./Home.css";
 import IndexSection from "./IndexSection";
 import InvoiceSection from "./InvoiceSection";
 import { Link } from "react-router-dom";
+import Activities from "./Activities";
+import Utility from "../utilities/Utility";
 
 const SectionHome = ({
   name,
@@ -19,17 +21,13 @@ const SectionHome = ({
         </Link>
       </h1>
       <div className="section-home-content">
-        {counter === true ? (
-          <IndexSection useTranslation={useTranslation} />
-        ) : (
-          <></>
-        )}
-        {subscription === true ? (
+        {counter === true && <IndexSection useTranslation={useTranslation} />}
+
+        {subscription === true && (
           <InvoiceSection useTranslation={useTranslation} />
-        ) : (
-          <></>
         )}
       </div>
+      {name === "Activities" && <Activities useTranslation={useTranslation} />}
     </div>
   );
 };

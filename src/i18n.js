@@ -39,6 +39,7 @@ i18n.use(initReactI18next).init({
         "Full Name": "Full Name",
         Register: "Register",
         "Registration form": "Registration form",
+        "Monthly Data": "Monthly Data",
       },
     },
     fr: {
@@ -77,6 +78,7 @@ i18n.use(initReactI18next).init({
         "Full Name": "Nom complet",
         Register: "S'inscrire",
         "Registration form": "Formulaire d'inscription",
+        "Monthly Data": "Données mensuelles",
       },
     },
     ro: {
@@ -115,6 +117,7 @@ i18n.use(initReactI18next).init({
         "Full Name": "Nume complet",
         Register: "Inregistrare",
         "Registration form": "Formular de inregistrare",
+        "Monthly Data": "Date lunare",
       },
     },
   },

@@ -10,10 +10,23 @@ import {
   Button,
   TableSortLabel,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import ActivityView from "./ActivityView";
 import axios from "axios";
 import dayjs from "dayjs";
+import {
+  Delete,
+  Edit,
+  FiberNew,
+  Done,
+  Autorenew,
+  HourglassEmpty,
+  PlayCircleFilled,
+  AccessTime,
+  Pending,
+  HourglassBottom,
+} from "@mui/icons-material";
 
 const Todo = ({ useTranslation }) => {
   const [dataTodoList, setDataTodoList] = useState([]);
@@ -25,6 +38,7 @@ const Todo = ({ useTranslation }) => {
         const result = await axios.get("http://localhost:5000/tasks/get", {
           withCredentials: true,
         });
+
         setDataTodoList(result.data);
         setRows(result.data);
       } catch (error) {
@@ -112,6 +126,14 @@ const Todo = ({ useTranslation }) => {
     });
   });
 
+  const handleDeleteClick = async (id) => {
+    console.log("Delete clicked for", id);
+  };
+
+  const handleEditClick = (id) => {
+    console.log("Edit clicked for", id);
+  };
+
   return (
     <div className="activities-container-table">
       <h1 className="activities-table-title">
@@ -122,6 +144,7 @@ const Todo = ({ useTranslation }) => {
           variant="contained"
           color="primary"
           onClick={handleAddTaskClick}
+          sx={{ fontSize: "1.1rem", marginLeft: "1.2rem" }}
         >
           {useTranslation("Add Task")}
         </Button>
@@ -131,6 +154,7 @@ const Todo = ({ useTranslation }) => {
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#9EC7EF" }}>
+                <TableCell></TableCell>
                 <TableCell>
                   <TableSortLabel
                     active={orderBy === "type"}
@@ -195,25 +219,30 @@ const Todo = ({ useTranslation }) => {
                 <TableCell></TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>
+                <TableCell></TableCell>
+                <TableCell colSpan={6}>
                   <TextField
                     variant="outlined"
                     size="small"
                     placeholder="Filter Words"
                     value={filterText}
                     onChange={(e) => handleFilterChange(e.target.value)}
+                    sx={{ fontSize: "1.2rem", width: "100%" }}
                   />
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredRows.map((activity, index) => (
-                <TableRow
-                  key={index}
-                  sx={{
-                    backgroundColor: index % 2 === 0 ? "#f5f5f5" : "white",
-                  }}
-                >
+                <TableRow key={index}>
+                  <TableCell>
+                    <Tooltip title="Edit task" arrow>
+                      <Edit onClick={() => handleEditClick(activity._id)} />
+                    </Tooltip>
+                    <Tooltip title="Delete task" arrow>
+                      <Delete onClick={() => handleDeleteClick(activity._id)} />
+                    </Tooltip>
+                  </TableCell>
                   <TableCell>{activity.type}</TableCell>
                   <TableCell>{activity.name}</TableCell>
                   <TableCell>{activity.client}</TableCell>
@@ -229,19 +258,42 @@ const Todo = ({ useTranslation }) => {
                     {dayjs(activity.start_date).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell>
-                    {" "}
                     {dayjs(activity.due_date).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ marginLeft: "10px" }}
-                      onClick={() => handleStartTodo(activity.id)}
-                    >
-                      Start
-                    </Button>
+                    {activity.status === "New" && (
+                      <Tooltip title="New Task" arrow>
+                        <FiberNew />
+                      </Tooltip>
+                    )}
+                    {activity.status === "Completed" && (
+                      <Tooltip title="Completed" arrow>
+                        <Done />
+                      </Tooltip>
+                    )}
+                    {activity.status === "Pending" && (
+                      <Tooltip title="Pending" arrow>
+                        <Pending />
+                      </Tooltip>
+                    )}
+                    {activity.status === "In Progress" && (
+                      <Tooltip title="In Progress" arrow>
+                        <HourglassBottom />
+                      </Tooltip>
+                    )}
                   </TableCell>
+                  {activity.status === "New" && (
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => handleStartTodo(activity._id)}
+                      >
+                        Start
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

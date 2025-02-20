@@ -8,11 +8,10 @@ import {
   TableCell,
   TableBody,
   Button,
-  Modal,
-  Box,
-  Typography,
 } from "@mui/material";
-import ActivityView from "./ActivityView";
+
+import axios from "axios";
+import dayjs from "dayjs";
 
 const OnGoing = ({ useTranslation }) => {
   useEffect(() => {
@@ -28,28 +27,26 @@ const OnGoing = ({ useTranslation }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const [dataActivities, setDataActivities] = useState([
-    {
-      id: 1,
-      type: "Work",
-      client: "Client 1",
-      description: "Description 1",
-      startDate: "02-13-2025 09:00",
-      endDate: "",
-      timeConsumed: "",
-      status: "Started",
-    },
-    {
-      id: 2,
-      type: "Personal",
-      client: "Client 2",
-      description: "Description 2",
-      startDate: "",
-      endDate: "",
-      timeConsumed: "",
-      status: "On going",
-    },
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axios.get(
+          "http://localhost:5000/tasks/get/?status=Pending",
+          {
+            withCredentials: true,
+          }
+        );
+
+        setDataActivities(result.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [dataActivities, setDataActivities] = useState([]);
 
   const calculateTimeConsumed = (startDate, endDate) => {
     if (!startDate) return "-";
@@ -74,20 +71,6 @@ const OnGoing = ({ useTranslation }) => {
     console.log("Pause clicked for", activity);
   };
 
-  const handleRowClick = (activity) => {
-    handleModalOpen();
-  };
-
-  /// Modal
-  const [open, setOpen] = useState(false);
-  const handleModalClose = () => {
-    setOpen(false);
-  };
-
-  const handleModalOpen = () => {
-    setOpen(true);
-  };
-
   return (
     <div>
       <div className="activities-container-table">
@@ -101,8 +84,8 @@ const OnGoing = ({ useTranslation }) => {
                 <TableCell>{useTranslation("Type")}</TableCell>
                 <TableCell>{useTranslation("Client")}</TableCell>
                 <TableCell>{useTranslation("Description")}</TableCell>
-                <TableCell>{useTranslation("Start Date")}</TableCell>
-                <TableCell>{useTranslation("End Date")}</TableCell>
+                <TableCell>{useTranslation("Creation Date")}</TableCell>
+                <TableCell>{useTranslation("Due Date")}</TableCell>
                 <TableCell>{useTranslation("Time consumed")}</TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -112,26 +95,25 @@ const OnGoing = ({ useTranslation }) => {
                 <TableRow
                   key={index}
                   style={{
-                    animation: activity.startDate
+                    animation: activity.start_date
                       ? "flicker 2s infinite"
                       : "none",
                   }}
                 >
                   <TableCell>{activity.type}</TableCell>
                   <TableCell>{activity.client}</TableCell>
-                  <TableCell
-                    className="activities-table-description"
-                    onClick={() => {
-                      handleRowClick(activity);
-                    }}
-                  >
+                  <TableCell className="activities-table-description">
                     {activity.description}
                   </TableCell>
-                  <TableCell>{activity.startDate}</TableCell>
-                  <TableCell>{activity.endDate}</TableCell>
+                  <TableCell>
+                    {dayjs(activity.start_date).format("DD/MM/YYYY")}
+                  </TableCell>
+                  <TableCell>
+                    {dayjs(activity.due_date).format("DD/MM/YYYY")}
+                  </TableCell>
                   <TableCell>{activity.timeConsumed}</TableCell>
                   <TableCell>
-                    {activity.startDate ? (
+                    {activity.start_date ? (
                       <>
                         <Button
                           onClick={() => handleEnd(activity)}
@@ -174,19 +156,6 @@ const OnGoing = ({ useTranslation }) => {
           </style>
         </TableContainer>
       </div>
-
-      <Modal
-        open={open}
-        onClose={handleModalClose}
-        aria-labelledby="modal-modal-title"
-      >
-        <Box className="modal-viewActivity">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {useTranslation("Activity")}
-          </Typography>
-          <ActivityView useTranslation={useTranslation} />
-        </Box>
-      </Modal>
     </div>
   );
 };

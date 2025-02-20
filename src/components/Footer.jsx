@@ -18,22 +18,24 @@ const LanguageSelector = () => {
 
 const Footer = () => {
   return (
-    <Box
-      component={"footer"}
-      position={"fixed"}
-      bottom={0}
-      left={0}
-      width="100%"
-      display={"flex"}
-      height="3rem"
-      alignItems="center"
-      bgcolor={"primary.main"}
-    >
-      <Container>
-        <LanguageIcon />
-        <LanguageSelector />
-      </Container>
-    </Box>
+    <div>
+      <Box
+        component={"footer"}
+        position={"fixed"}
+        bottom={0}
+        left={0}
+        width="100%"
+        display={"flex"}
+        height="3rem"
+        alignItems="center"
+        bgcolor={"primary.main"}
+      >
+        <Container>
+          <LanguageIcon />
+          <LanguageSelector />
+        </Container>
+      </Box>
+    </div>
   );
 };
 

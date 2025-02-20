@@ -20,8 +20,15 @@
 .section-home-content {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+   
+    
+}
+
+.ValuesSection {
+    flex-direction: row;
+    flex-grow: 1;
+    
+    
 }
 
 

@@ -55,6 +55,7 @@ const Header = ({
         withCredentials: true,
       });
       setConnectedUser("");
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -76,7 +77,9 @@ const Header = ({
               component: "Home",
               onMain: false,
             });
-            navigate("/");
+            {
+              connectedUser ? navigate("/DashBoard") : navigate("/");
+            }
           }}
         >
           Home

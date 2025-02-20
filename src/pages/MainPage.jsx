@@ -4,10 +4,10 @@ import SideMenu from "../components/SideMenu";
 import Content from "../components/Content";
 import Footer from "../components/Footer";
 import LoginPage from "../pages/LoginPage";
+import RegisterPage from "./RegisterPage";
+import DashBoard from "./DashBoard";
 import { useTranslation } from "react-i18next";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import "../styles/main.css";
 import {
   createTheme,
@@ -16,7 +16,7 @@ import {
   Drawer,
   Box,
 } from "@mui/material";
-import RegisterPage from "./RegisterPage";
+import HomePage from "./HomePage";
 
 const MainPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -31,6 +31,7 @@ const MainPage = () => {
   });
 
   const [menuItems, setMenuItems] = useState([
+    { id: 0, label: "DashBoard", component: "Dashboard", onMain: false },
     { id: 1, label: "Activities", component: "Activities", onMain: true },
     {
       id: 2,
@@ -107,15 +108,17 @@ const MainPage = () => {
           />
           <Routes>
             <Route
-              path="/"
+              path="/dashboard"
               element={
-                <Content
+                <DashBoard
+                  useTranslation={t}
                   selectedMenuItem={currentMenu?.component}
                   menuItems={menuItems.filter((item) => item.onMain)}
-                  useTranslation={t}
                 />
               }
             />
+            <Route path="/" element={<HomePage useTranslation={t} />} />
+
             <Route path="/login" element={<LoginPage useTranslation={t} />} />
 
             {menuItems.map((item) => (

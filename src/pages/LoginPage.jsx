@@ -41,7 +41,7 @@ const LoginPage = ({ useTranslation }) => {
           console.log(message);
         })
         .then(() => {
-          navigate("/");
+          navigate("/DashBoard");
         })
         .catch((err) => {
           setMessage(err.response.data.message);
